@@ -1,30 +1,30 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import getBaseUrl from '../../../utils/baseURL';
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import getBaseUrl from '../../../utils/baseURL'
 
-const baseQuery = fetchBaseQuery({
+const  baseQuery = fetchBaseQuery({
     baseUrl: `${getBaseUrl()}/api/books`,
     credentials: 'include',
-    prepareHeaders: (headers) => {
-        const token = localStorage.getItem('token');
-        if (token) {
-            headers.set('Authorization', `Bearer ${token}`);
+    prepareHeaders: (Headers) => {
+        const token =  localStorage.getItem('token');
+        if(token) {
+            Headers.set('Authorization', `Bearer ${token}`);
         }
-        return headers;
+        return Headers;
     }
-});
+})
 
 const booksApi = createApi({
-    reducerPath: 'bookApi',
+    reducerPath: 'booksApi',
     baseQuery,
     tagTypes: ['Books'],
-    endpoints: (builder) => ({
+    endpoints: (builder) =>({
         fetchAllBooks: builder.query({
             query: () => "/",
             providesTags: ["Books"]
         }),
-        fetchBookByID: builder.query({
-            query: (id) => `/${id}`,  // Fixed string interpolation
-            providesTags: (result, error, id) => [{ type: "Books", id }],  // Fixed typo
+        fetchBookById: builder.query({
+            query: (id) => `/${id}`,
+            providesTags: (result, error, id) => [{ type: "Books", id }],
         }),
         addBook: builder.mutation({
             query: (newBook) => ({
@@ -35,14 +35,14 @@ const booksApi = createApi({
             invalidatesTags: ["Books"]
         }),
         updateBook: builder.mutation({
-            query: ({ id, ...rest }) => ({
+            query: ({id, ...rest}) => ({
                 url: `/edit/${id}`,
                 method: "PUT",
                 body: rest,
                 headers: {
                     'Content-Type': 'application/json'
                 }
-            }),  // Fixed missing brace here
+            }),
             invalidatesTags: ["Books"]
         }),
         deleteBook: builder.mutation({
@@ -53,13 +53,7 @@ const booksApi = createApi({
             invalidatesTags: ["Books"]
         })
     })
-});
+})
 
-export const {
-    useFetchAllBooksQuery,
-    useFetchBookByIDQuery,
-    useAddBookMutation,
-    useUpdateBookMutation,
-    useDeleteBookMutation
-} = booksApi;
+export const {useFetchAllBooksQuery, useFetchBookByIdQuery, useAddBookMutation, useUpdateBookMutation, useDeleteBookMutation} = booksApi;
 export default booksApi;
