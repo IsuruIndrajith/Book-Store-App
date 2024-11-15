@@ -3,11 +3,12 @@ import { useSelector } from 'react-redux'
 import { useForm } from "react-hook-form"
 ;
 import { Link } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 
 const CheckoutPage = () => {
     const cartItems = useSelector(state => state.cart.cartItems);
     const totalPrice = cartItems.reduce((acc, item) => acc + item.newPrice, 0).toFixed(2);
-    const currentUser = true;
+    const { currentUser } = useAuth();
 
     const {
         register,
@@ -39,7 +40,7 @@ const CheckoutPage = () => {
     <div className="container max-w-screen-lg mx-auto">
         <div>
             <div>
-            <h2 className="font-semibold text-xl text-gray-600 mb-2">Cash On Delevary</h2>
+            <h2 className="font-semibold text-xl text-gray-600 mb-2">Cash On Delivery</h2>
             <p className="text-gray-500 mb-2">Total Price: $0</p>
             <p className="text-gray-500 mb-6">Items:0</p>
             </div>
